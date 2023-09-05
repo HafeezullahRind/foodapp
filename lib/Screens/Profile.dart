@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/Screens/location.dart';
 
 import 'LoginPage.dart';
 import 'MainPage.dart';
@@ -104,7 +105,7 @@ class ProfilePage extends StatelessWidget {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.shopping_cart),
-                label: 'Add to cart',
+                label: 'Cart',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.person),
@@ -115,6 +116,10 @@ class ProfilePage extends StatelessWidget {
               if (index == 0) {
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => MainPage()));
+              }
+              if (index == 1) {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => LocationScreen()));
               }
               // Switch between tabs
             },

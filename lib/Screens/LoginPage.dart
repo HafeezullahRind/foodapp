@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:foodapp/Components/CustomTextField.dart';
+import '../model/CustomTextField.dart';
 import 'package:foodapp/Screens/forgetpass.dart';
+import 'package:foodapp/Screens/location.dart';
 
+import '../model/toastMessage.dart';
 import 'MainPage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -15,6 +19,16 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   var rememberPassword = false;
+  final _formkey = GlobalKey<FormState>();
+  bool loading = false;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void dispose() {
+    super.dispose();
+    nameController.dispose();
+    passwordController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,23 +81,42 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  CustomTextField(
-                    controller: nameController,
-                    icon: Icon(Icons.email_outlined),
-                    onChanged: (newValue) {
-                      print('User input: $newValue');
-                    },
-                    label: 'Email',
-                    obscureText: false,
-                  ),
-                  CustomTextField(
-                    label: "Password",
-                    controller: passwordController,
-                    icon: Icon(Icons.lock_outline),
-                    onChanged: (newValue) {
-                      print('User input: $newValue');
-                    },
-                    obscureText: true,
+                  Form(
+                    key: _formkey,
+                    child: Column(
+                      children: [
+                        CustomTextField(
+                          controller: nameController,
+                          icon: Icon(Icons.email_outlined),
+                          onChanged: (newValue) {
+                            print('User input: $newValue');
+                          },
+                          label: 'Email',
+                          obscureText: false,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Enter Email";
+                            }
+                            return null;
+                          },
+                        ),
+                        CustomTextField(
+                          label: "Password",
+                          controller: passwordController,
+                          icon: Icon(Icons.lock_outline),
+                          onChanged: (newValue) {
+                            print('User input: $newValue');
+                          },
+                          obscureText: true,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Enter Email";
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -141,17 +174,19 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        // Handle login button tap
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => MainPage()),
-                        );
+                        login();
                       },
-                      child: Text(
-                        "Login",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 0.032 * screenWidth),
-                      ),
+                      child: loading
+                          ? const CircularProgressIndicator(
+                              strokeWidth: 3,
+                              color: Colors.white,
+                            )
+                          : Text(
+                              "Login",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 0.032 * screenWidth),
+                            ),
                     ),
                   ),
                   SizedBox(height: 0.02 * screenWidth),
@@ -174,5 +209,37 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void login() {
+    if (_formkey.currentState!.validate()) {
+      setState(() {
+        loading = true;
+      });
+      _auth
+          .signInWithEmailAndPassword(
+              email: nameController.text.toString(),
+              password: passwordController.text.toString())
+          .then((value) {
+        setState(() {
+          loading = true;
+        });
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MainPage(),
+          ),
+        );
+      }).onError(
+        (error, stackTrace) {
+          setState(() {
+            loading = false;
+          });
+          toast().toastMessage(
+            error.toString(),
+          );
+        },
+      );
+    }
   }
 }

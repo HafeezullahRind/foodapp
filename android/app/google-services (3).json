@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "12354974215",
+    "project_id": "hallal-foods",
+    "storage_bucket": "hallal-foods.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12354974215:android:f7e654cfa5a3e2203670a2",
+        "android_client_info": {
+          "package_name": "com.devTechs.foodapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "12354974215-a6qgedathsrpvrsroccp6tom5dp1cjdc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjalp654WdInDaWdh1zAeclPDz2zi9NZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "12354974215-a6qgedathsrpvrsroccp6tom5dp1cjdc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

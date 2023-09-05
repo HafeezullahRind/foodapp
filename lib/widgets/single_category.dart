@@ -29,24 +29,14 @@ class SingleCategory extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              // Image.network(
-              //   "http://lorempixel.com/400/200/",
-              //   fit: BoxFit.cover,
-              //   height: 60,
-              //   width: 250,
-              // ),
               Text(
                 title,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 18),
               ),
-              // FlatButton(
-              //   color: Colors.amber,
-              //   shape: RoundedRectangleBorder(
-              //       borderRadius: BorderRadius.circular(30)),
-              //   child: Text("Order Now"),
-              //   onPressed: () {},
-              // )
+              const SizedBox(
+                height: 10,
+              ),
             ],
           ),
         ),

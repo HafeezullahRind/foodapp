@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
 import '../data/data.dart';
+import '../model/cart.dart';
+import '../model/meal.dart';
 import '../routes/route_meal_detail.dart';
-
 
 class MealList extends StatelessWidget {
   final String foodCategoryTitle;
   final String catId;
+  final List<Cart> cartItems = [];
+  MealList(this.foodCategoryTitle, this.catId);
 
-  const MealList(this.foodCategoryTitle, this.catId);
+  void _addToCart(Meal meal) {
+    final cartItem = Cart(
+      mealId: meal.id,
+      mealName: meal.title,
+      mealImageUrl: meal.imageUrl,
+    );
+    cartItems.add(cartItem);
+    print(cartItem.mealId);
+    print(cartItem.mealImageUrl);
+    print(cartItem.mealName);
+    // You can show a confirmation message to the user here if needed.
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,17 +63,26 @@ class MealList extends StatelessWidget {
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Icon(Icons.access_time),
-                        SizedBox(width: 10),
+                        const Icon(Icons.access_time),
+                        const SizedBox(width: 10),
                         Text(mealNameList[index].duration.toString() +
                             " minutes"),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        Icon(Icons.assignment),
-                        SizedBox(width: 10),
-                        Text("Tap on food for detail"),
+                        const Icon(Icons.assignment),
+                        const SizedBox(width: 10),
+                        const Text("Tap on food for detail"),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        // IconButton(
+                        //   onPressed: () {
+                        //     _addToCart(mealNameList[index]);
+                        //   },
+                        //   icon: const Icon(Icons.add_shopping_cart),
+                        // )
                       ],
                     )
                   ],

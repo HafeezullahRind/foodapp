@@ -5,7 +5,8 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final Icon icon;
   final ValueChanged<String> onChanged;
-  final obscureText;
+  final bool obscureText;
+  final String? Function(String?)? validator; // Validation function
 
   const CustomTextField({
     Key? key,
@@ -13,7 +14,8 @@ class CustomTextField extends StatelessWidget {
     required this.controller,
     required this.icon,
     required this.onChanged,
-    this.obscureText,
+    this.obscureText = false, // Default value for obscureText
+    this.validator, // Pass the validation function
   }) : super(key: key);
 
   @override
@@ -27,9 +29,9 @@ class CustomTextField extends StatelessWidget {
             borderRadius: BorderRadius.circular(40),
           ),
           margin: EdgeInsets.all(10),
-          child: TextField(
+          child: TextFormField( // Use TextFormField instead of TextField
             controller: controller,
-            onChanged: onChanged, // Call the provided onChanged function
+            onChanged: onChanged,
             obscureText: obscureText,
             decoration: InputDecoration(
               labelText: label,
@@ -38,6 +40,7 @@ class CustomTextField extends StatelessWidget {
               ),
               prefixIcon: icon,
             ),
+            validator: validator, // Set the validator
           ),
         ),
       ],

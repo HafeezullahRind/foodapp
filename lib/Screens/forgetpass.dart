@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Components/CustomTextField.dart';
+import '../model/CustomTextField.dart';
 
 class ForgetPass extends StatelessWidget {
   ForgetPass({Key? key});

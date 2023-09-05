@@ -1,4 +1,3 @@
-
 enum Complexity { Simple, Challenging, Hard }
 
 enum Affordability { Affordable, Pricey, Luxurious }
@@ -33,4 +32,8 @@ class Meal {
     required this.isVegan,
     required this.isVegetarian,
   });
+
+  String get mealId => id;
+
+  String get mealTitle => title;
 }

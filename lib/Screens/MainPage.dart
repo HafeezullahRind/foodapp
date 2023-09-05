@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/Screens/Add_to_cart.dart';
+import '../model/meal.dart';
 import '../widgets/single_category.dart';
 import '../data/data.dart';
 import 'Profile.dart';
+import '../model/cart.dart';
+import 'location.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MainPage(),
-    );
-  }
-}
+final List<Cart> cartItems = [];
+late final String foodCategoryTitle;
+late final String catId;
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    List<Cart> cartItems = [];
     return Scaffold(
       body: Column(
         children: [
@@ -58,6 +54,18 @@ class MainPage extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) => ProfilePage()),
               );
+            }
+
+            if (index == 1) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddToCartScreen(cartItems)),
+              );
+            }
+            if (index == 1) {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => LocationScreen()));
             }
           },
           items: const [
@@ -150,7 +158,7 @@ Widget _topWidget() {
                       color: Colors.white, fontSize: screenWidth * 0.032),
                 ),
                 Text(
-                  'Dani Martinez',
+                  'User!',
                   style: TextStyle(
                       color: Colors.white, fontSize: screenWidth * 0.035),
                 ),
