@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import '../model/CustomTextField.dart';
 
@@ -5,6 +7,26 @@ class ForgetPass extends StatelessWidget {
   ForgetPass({Key? key});
 
   TextEditingController EmailController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  void resetPass(BuildContext context) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: EmailController.text);
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Password reset email sent. Check your email inbox.'),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to send password reset email.'),
+        ),
+      );
+      print('Error sending password reset email: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +127,7 @@ class ForgetPass extends StatelessWidget {
               ),
               child: TextButton(
                 onPressed: () {
-                  // Handle login button tap
+                  resetPass(context);
                 },
                 child: Text(
                   'Submit',

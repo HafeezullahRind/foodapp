@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/Screens/location.dart';
 
+import '../model/CartItem.dart';
 import 'LoginPage.dart';
 import 'MainPage.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  ProfilePage({super.key});
+
+  List<CartItem> cartItems = [];
 
   @override
   Widget build(BuildContext context) {
@@ -114,8 +117,10 @@ class ProfilePage extends StatelessWidget {
             ],
             onTap: (index) {
               if (index == 0) {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => MainPage()));
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MainPage(cartItems: cartItems)));
               }
               if (index == 1) {
                 Navigator.pushReplacement(context,

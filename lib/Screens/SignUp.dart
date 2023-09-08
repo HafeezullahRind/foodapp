@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/Screens/LoginPage.dart';
+import '../model/CartItem.dart';
 import '../model/CustomTextField.dart';
-import '../model/toastMessage.dart';
 import 'MainPage.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -21,6 +21,7 @@ class _SignUpPageState extends State<SignUpPage> {
   var rememberPassword = false;
   final _formkey = GlobalKey<FormState>();
   bool loading = false;
+  List<CartItem> cartItems = [];
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -37,6 +38,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
+    List<CartItem> cartItems = [];
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -238,10 +240,15 @@ class _SignUpPageState extends State<SignUpPage> {
               password: _passwordController.text.toString())
           .then((value) => setState(() {
                 loading = false;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Signup Successfull'),
+                  ),
+                );
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MainPage(),
+                    builder: (context) => MainPage(cartItems: cartItems),
                   ),
                 );
               }))
@@ -250,8 +257,10 @@ class _SignUpPageState extends State<SignUpPage> {
           setState(() {
             loading = false;
           });
-          toast().toastMessage(
-            error.toString(),
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Something went wrong or Account Already Exists'),
+            ),
           );
         },
       );

@@ -1,12 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:foodapp/Screens/MainPage.dart';
-import 'package:foodapp/Screens/SignUp.dart';
-import 'package:foodapp/Screens/location.dart';
-import 'Screens/Add_to_cart.dart';
-import 'Screens/LoginPage.dart';
-import 'package:foodapp/Screens/forgetpass.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:foodapp/Screens/SignUp.dart';
+import 'package:provider/provider.dart';
+
+import 'Screens/LoginPage.dart';
+import 'model/CartProvider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +16,8 @@ void main() async {
       messagingSenderId: '',
     ),
   );
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => CartProvider(), child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

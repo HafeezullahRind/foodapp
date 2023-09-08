@@ -1,11 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import '../model/CustomTextField.dart';
 import 'package:foodapp/Screens/forgetpass.dart';
-import 'package:foodapp/Screens/location.dart';
 
-import '../model/toastMessage.dart';
 import 'MainPage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -223,11 +220,16 @@ class _LoginPageState extends State<LoginPage> {
           .then((value) {
         setState(() {
           loading = true;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Login Successfull'),
+            ),
+          );
         });
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const MainPage(),
+            builder: (context) => MainPage(cartItems: []),
           ),
         );
       }).onError(
@@ -235,8 +237,10 @@ class _LoginPageState extends State<LoginPage> {
           setState(() {
             loading = false;
           });
-          toast().toastMessage(
-            error.toString(),
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Something went wrong try again'),
+            ),
           );
         },
       );

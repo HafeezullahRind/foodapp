@@ -1,52 +1,93 @@
 import 'package:flutter/material.dart';
-import '../data/data.dart';
-import '../model/meal.dart';
-import '../model/cart.dart';
+import 'package:foodapp/Screens/PaymentScreen.dart';
+import 'package:provider/provider.dart';
+import '../model/CartProvider.dart';
 
-class AddToCartScreen extends StatelessWidget {
-  final List<Cart> cartItems;
-
-  AddToCartScreen(this.cartItems);
-
+class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
+    double totalSum = cartProvider.cartItems
+        .map((cartItem) => cartItem.price * cartItem.quantity)
+        .fold(0, (prev, price) => prev + price);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add to Cart'),
+        title: Text('Cart'),
       ),
-      body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-        ),
-        itemCount: cartItems.length,
+      body: ListView.builder(
+        itemCount: cartProvider.cartItems.length,
         itemBuilder: (context, index) {
-          final cartItem = cartItems[index];
-          final meal =
-              DUMMY_MEALS.firstWhere((item) => item.id == cartItem.mealId);
+          final cartItem = cartProvider.cartItems[index];
 
-          return Card(
-            elevation: 3,
-            child: Column(
+          // Increase item quantity logic
+          void increaseQuantity() {
+            cartProvider.increaseItemQuantity(cartItem);
+          }
+
+          // Decrease item quantity logic
+          void decreaseQuantity() {
+            cartProvider.decreaseItemQuantity(cartItem);
+          }
+
+          return ListTile(
+            leading: Image.network(
+              cartItem.meal.imageUrl, // Use the image URL from your CartItem
+              width: 80, // Set the desired width
+              height: 80, // Set the desired height
+              fit: BoxFit.cover, // Adjust the fit as needed
+            ),
+            title: Text(cartItem.meal.title),
+            subtitle: Text(
+              'Price: ${cartItem.price.toStringAsFixed(2)} PKR',
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Image.network(
-                  meal.imageUrl,
-                  height: 120,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
+                IconButton(
+                  icon: Icon(Icons.remove),
+                  onPressed: () {
+                    // Check if quantity is greater than 1 before decreasing
+                    if (cartItem.quantity > 1) {
+                      decreaseQuantity();
+                    }
+                  },
                 ),
-                SizedBox(height: 8),
                 Text(
-                  meal.title,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
+                  cartItem.quantity.toString(),
+                  style: TextStyle(fontSize: 18),
+                ),
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    increaseQuantity();
+                  },
                 ),
               ],
             ),
           );
         },
       ),
+      bottomNavigationBar: BottomAppBar(
+          child: Container(
+        padding: EdgeInsets.all(16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Total : ${totalSum.toStringAsFixed(2)} PKR",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            ElevatedButton(
+              onPressed: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => Payment()),
+                // );
+              },
+              child: Text('Complete Order'),
+            ),
+          ],
+        ),
+      )),
     );
   }
 }

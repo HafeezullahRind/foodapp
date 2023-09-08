@@ -1,36 +1,59 @@
+
 import 'package:flutter/material.dart';
 import 'package:foodapp/Screens/Add_to_cart.dart';
+import 'package:provider/provider.dart';
+import '../model/CartProvider.dart';
 import '../model/meal.dart';
-import '../widgets/single_category.dart';
 import '../data/data.dart';
 import 'Profile.dart';
-import '../model/cart.dart';
+import '../model/CartItem.dart';
 import 'location.dart';
+import '../model/MealItem.dart';
 
-final List<Cart> cartItems = [];
-late final String foodCategoryTitle;
-late final String catId;
+class MainPage extends StatefulWidget {
+  final List<CartItem> cartItems;
 
-class MainPage extends StatelessWidget {
-  const MainPage({super.key});
+  MainPage({Key? key, required this.cartItems}) : super(key: key);
+
+  @override
+  _MainPageState createState() => _MainPageState();
+
+  void addToCart(Meal meal) {
+    double price = meal.price;
+    CartItem cartItem = CartItem(meal: meal, price: price, quantity: 1);
+    cartItems.add(cartItem);
+    print(cartItem.meal.imageUrl);
+    print(cartItem.meal.mealTitle);
+  }
+}
+
+class _MainPageState extends State<MainPage> {
+  String searchQuery = '';
 
   @override
   Widget build(BuildContext context) {
-    List<Cart> cartItems = [];
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
     return Scaffold(
       body: Column(
         children: [
-          CustomAppBar(),
+          CustomAppBar(
+            onSearch: (query) {
+              setState(() {
+                searchQuery = query;
+              });
+            },
+          ),
           Expanded(
             child: GridView.count(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              childAspectRatio: 4 / 3,
-              shrinkWrap: true,
-              children: DUMMY_CATEGORIES
-                  .map(
-                      (item) => SingleCategory(item.id, item.title, item.color))
+              crossAxisCount: 2, // Number of columns in the grid
+              mainAxisSpacing: 16.0, // Vertical spacing between grid items
+              crossAxisSpacing: 16.0, // Horizontal spacing between grid items
+              padding: const EdgeInsets.all(16.0), // Padding around the grid
+              children: DUMMY_MEALS
+                  .where((meal) => meal.title
+                      .toLowerCase()
+                      .contains(searchQuery.toLowerCase()))
+                  .map((meal) => MealItem(meal))
                   .toList(),
             ),
           ),
@@ -59,11 +82,10 @@ class MainPage extends StatelessWidget {
             if (index == 1) {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => AddToCartScreen(cartItems)),
+                MaterialPageRoute(builder: (context) => CartPage()),
               );
             }
-            if (index == 1) {
+            if (index == 0) {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => LocationScreen()));
             }
@@ -89,6 +111,10 @@ class MainPage extends StatelessWidget {
 }
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final ValueChanged<String> onSearch;
+
+  CustomAppBar({required this.onSearch});
+
   @override
   Size get preferredSize => Size.fromHeight(100);
 
@@ -124,7 +150,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   prefixIcon: Icon(Icons.search),
                   hintText: 'Search Food Items',
                 ),
-                onSubmitted: (value) {},
+                onChanged: onSearch,
               ),
             ),
           ),
@@ -135,48 +161,50 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 Widget _topWidget() {
-  return LayoutBuilder(
-    builder: (BuildContext context, BoxConstraints constraints) {
-      var screenWidth = MediaQuery.of(context).size.width;
-      var screenHeight = MediaQuery.of(context).size.height;
-      return SizedBox(
-        height: 70,
-        child: Row(
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://www.mensjournal.com/.image/c_limit%2Ccs_srgb%2Cq_auto:good%2Cw_760/MTk2MTM2NTcwNDMxMjg0NzQx/man-taking-selfie.webp'),
-            ),
-            SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Welcome',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: screenWidth * 0.032),
-                ),
-                Text(
-                  'User!',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: screenWidth * 0.035),
-                ),
-              ],
-            ),
-            Spacer(),
-            IconButton(
-              icon: Icon(
-                Icons.notifications,
-                color: Colors.white,
+  return SafeArea(
+    child: LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        var screenWidth = MediaQuery.of(context).size.width;
+        var screenheight = MediaQuery.of(context).size.height;
+        return SizedBox(
+          height: 0.14 * screenWidth,
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(
+                    'https://www.mensjournal.com/.image/c_limit%2Ccs_srgb%2Cq_auto:good%2Cw_760/MTk2MTM2NTcwNDMxMjg0NzQx/man-taking-selfie.webp'),
               ),
-              onPressed: () {
-                // Notification logic
-              },
-            ),
-          ],
-        ),
-      );
-    },
+              SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Welcome',
+                    style: TextStyle(
+                        color: Colors.white, fontSize: screenWidth * 0.032),
+                  ),
+                  Text(
+                    'User!',
+                    style: TextStyle(
+                        color: Colors.white, fontSize: screenWidth * 0.035),
+                  ),
+                ],
+              ),
+              Spacer(),
+              IconButton(
+                icon: Icon(
+                  Icons.notifications,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  // Notification logic
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    ),
   );
 }
