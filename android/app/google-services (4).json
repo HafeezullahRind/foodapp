@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "12354974215",
+    "firebase_url": "https://hallal-foods-default-rtdb.firebaseio.com",
     "project_id": "hallal-foods",
     "storage_bucket": "hallal-foods.appspot.com"
   },

@@ -1,14 +1,14 @@
-
 import 'package:flutter/material.dart';
 import 'package:foodapp/Screens/Add_to_cart.dart';
 import 'package:provider/provider.dart';
-import '../model/CartProvider.dart';
-import '../model/meal.dart';
+
 import '../data/data.dart';
-import 'Profile.dart';
 import '../model/CartItem.dart';
-import 'location.dart';
+import '../model/CartProvider.dart';
 import '../model/MealItem.dart';
+import '../model/meal.dart';
+import 'Profile.dart';
+import 'location.dart';
 
 class MainPage extends StatefulWidget {
   final List<CartItem> cartItems;

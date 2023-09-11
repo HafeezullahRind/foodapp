@@ -1,13 +1,17 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:foodapp/Screens/LoginPage.dart';
 import 'package:foodapp/Screens/SignUp.dart';
 import 'package:provider/provider.dart';
 
-import 'Screens/LoginPage.dart';
+import 'model/CartItem.dart';
 import 'model/CartProvider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey =
+      'pk_test_51NlxD4GOW0sElC9eNcFip24B2UxcELTU0ymmAktKkqEqIVAKX5Iwq8CNSprqfLJe2kGs01Q4iEXSGsTFzlaMsFSS00ukyqYpAh';
   await Firebase.initializeApp(
     options: const FirebaseOptions(
       apiKey: "AIzaSyCjalp654WdInDaWdh1zAeclPDz2zi9NZw",
@@ -25,14 +29,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        '/signup': (context) => SignUpPage(),
-        // ... other routes
-      },
-      debugShowCheckedModeBanner: false,
-      title: "Food App",
-      home: LoginPage(),
-    );
+    List<CartItem> cartItems = [];
+    return MaterialApp(routes: {
+      '/signup': (context) => SignUpPage(),
+      // ... other routes
+    }, debugShowCheckedModeBanner: false, title: "Food App", home: LoginPage()
+        //MainPage(cartItems: cartItems),
+        );
   }
 }

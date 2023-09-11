@@ -107,8 +107,8 @@ class ProfilePage extends StatelessWidget {
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart),
-                label: 'Cart',
+                icon: Icon(Icons.location_city_outlined),
+                label: 'Location',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.person),

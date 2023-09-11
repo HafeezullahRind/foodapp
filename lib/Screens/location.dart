@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:foodapp/Screens/MainPage.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../model/CartItem.dart';
 
 class LocationScreen extends StatefulWidget {
   const LocationScreen({Key? key}) : super(key: key);
@@ -15,6 +18,7 @@ class _LocationScreenState extends State<LocationScreen> {
   TextEditingController searchController = TextEditingController();
   Set<Marker> markers = {};
   String searchQuery = "";
+  List<CartItem> cartItems = [];
 
   @override
   void initState() {
@@ -129,9 +133,19 @@ class _LocationScreenState extends State<LocationScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50),
               child: ElevatedButton(
-                onPressed: onSavePressed,
-                child: Text("Save"),
-              ),
+                  onPressed: onSavePressed,
+                  child: TextButton(
+                    child: Text("Save"),
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MainPage(
+                                  cartItems: cartItems,
+                                )),
+                      );
+                    },
+                  )),
             ),
           ),
         ],

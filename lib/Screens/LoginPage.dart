@@ -235,6 +235,7 @@ class _LoginPageState extends State<LoginPage> {
       }).onError(
         (error, stackTrace) {
           setState(() {
+            
             loading = false;
           });
           ScaffoldMessenger.of(context).showSnackBar(
