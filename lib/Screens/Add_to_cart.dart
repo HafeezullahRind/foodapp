@@ -173,7 +173,7 @@ class CartPage extends StatelessWidget {
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
           'Authorization':
-              'Bearer sk_test_51NlxD4GOW0sElC9eoY43L59uuqPhA9pjzJQyntcH95TjL9jg0fJXK5cKbtHY7PgotodejuWszglafDXu00p8i1Ad00lQb66qFD',
+              'Bearer ${Your API}',
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body,
